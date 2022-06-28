@@ -6,7 +6,7 @@ Green growth pathways to stop climate change assume the economy will keep growin
 
 Story by: Ajit Niranjan
 
-Read the full article on DW.com: https://www.dw.com/en/degrowth-green-growth-climate-poverty/a-62285113
+Read the full article on DW.com: [English](https://www.dw.com/en/degrowth-green-growth-climate-poverty/a-62285113)
 
 # Data Sources
 
