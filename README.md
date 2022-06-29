@@ -27,3 +27,5 @@ Lorenz Keyßer, a degrowth researcher at the Swiss Federal Institute of Technolo
 Fadhel Kaboub, an economist at Denison University in the US who studies financial sovereignty in poor countries.
 
 Jason Hickel, an economic anthropologist at the Autonomous University of Barcelona and author of a book on degrowth.
+
+Lyla Mehta, a sociologist at the Institute of Development Studies at the University of Sussex who has published a feminist critique of degrowth.
