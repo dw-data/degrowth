@@ -105,19 +105,23 @@ data7 <- left_join(data6,data1990,by=c("country","code"))
 #calculate that percentage increase from the baseline
 data8 <- data7 %>% 
   group_by(country) %>% 
-  mutate(pc.increase.gdp = (gdp.per.cap - gdp.1990)/lag(gdp.per.cap)*100) %>%
-  mutate(pc.increase.emissions = (emissions.per.cap - emissions.1990)/lag(emissions.per.cap)*100)
+  mutate(pc.increase.gdp = (gdp.per.cap - gdp.1990)/gdp.1990*100) %>%
+  mutate(pc.increase.emissions = (emissions.per.cap - emissions.1990)/emissions.1990*100) %>% 
+  filter(between(year,1990,2020))
 data8[is.na(data8)]<-0
 
-#calculate the extent of decoupling in 2020
+#calculate the extent of decoupling in 2019
 data9 <- data8 %>% 
-  filter(year==2020) %>% 
-  mutate(diff2020 = pc.increase.gdp-pc.increase.emissions) %>% 
+  filter(year==2019) %>% 
+  mutate(diff2019 = pc.increase.gdp-pc.increase.emissions) %>% 
   select(1,2,16)
 data10<-left_join(data8,data9,by=c("country","code")) %>% 
-  arrange(desc(diff2020)) %>% 
-  mutate(diff2020=as.factor(diff2020)) %>% 
-  group_by(country)
+  arrange(desc(diff2019)) %>%
+  mutate(diff2019=as.factor(diff2019))%>% 
+  group_by(country) %>% 
+  select(1,3,14,15,16) %>% 
+  filter(country %in% c("France","Germany", "United Kingdom", "United States","Brazil","Egypt","Nigeria","Italy","Japan","Mexico","Nigeria","Pakistan","Philippines","Russia","Thailand","Turkey","Saudi Arabia"))
+#"Bangladesh","China","Vietnam","Indonesia"
 
 #plot decoupling in big economies
 v<-ggplot(data10, aes(x=year,group=country)) +
@@ -126,24 +130,26 @@ v<-ggplot(data10, aes(x=year,group=country)) +
   labs(c("GDP","CO2"))+
   xlab(NULL)+
   ylab(NULL)+
-  facet_wrap(~country, ncol=4)+ 
+  facet_wrap(~country, ncol=4) + 
   labs(title = "Only some countries have decoupled <b style='color:red'>GDP</b> from <b style='color:blue'>CO2</b>", 
-       subtitle = "Percentage change in <b style='color:red'>GDP</b> and  <b style='color:blue'>CO2 emissions</b> since 1990", x = "GDP per capita", y = "CO2 Emissions per capita",caption="Source: Our World in Data, Global Carbon Project") +
+       subtitle = "Percentage change in <b style='color:red'>GDP</b> and <b style='color:blue'>CO2 emissions</b> since 1990",caption="Source: Our World in Data, Global Carbon Project") +
   theme(plot.title = element_markdown(lineheight = 1.1),
         plot.subtitle = element_markdown(lineheight = 1.1))
-ggsave("graph4.svg",plot=v, width=10, height=8)
+v
+ggsave("small multiples corrected world.svg",plot=v, width=10, height=8)
 
 #plot decoupling in germany
-data11<-data8 %>% 
+data11<-data10 %>% 
   filter(country=="Germany")
 w<-ggplot(data11, aes(x=year)) +
   geom_line(aes(y=pc.increase.gdp),color="red")+
-  geom_line(aes(y=pc.increase.emissions),color="blue") +
+  geom_line(aes(y=pc.increase.emissions),color="blue")+
   labs(c("GDP","CO2"))+
   xlab(NULL)+
   ylab(NULL) + 
   labs(title = "Germany is growing <b style='color:red'>richer</b> and <b style='color:blue'>cleaner</b>", 
-       subtitle = "Percentage change in <b style='color:red'>GDP</b> and  <b style='color:blue'>C02 emissions</b> since 1990", x = "GDP per capita", y = "CO2 Emissions per capita",caption="Source: Our World in Data, Global Carbon Project") +
+       subtitle = "Percentage change in <b style='color:red'>GDP</b> and  <b style='color:blue'>C02 emissions</b> since 1990",caption="Source: Our World in Data, Global Carbon Project") +
   theme(plot.title = element_markdown(lineheight = 1.1),
         plot.subtitle = element_markdown(lineheight = 1.1))
-ggsave("graph3.svg",plot=w, width=10, height=8)
+w
+ggsave("germany corrected.svg",plot=w, width=10, height=8)
